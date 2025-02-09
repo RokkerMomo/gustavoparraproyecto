@@ -1,0 +1,57 @@
+.Blackbox {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    height: 250px;
+    justify-content: center;
+    text-align: center;
+}
+
+.BlackboxItem {
+    padding: 1.5rem;
+}
+
+.Img{
+    position: relative;
+    height: 500px;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    left: 0;
+}
+
+.Carrousel{
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    flex-direction: column;
+    justify-items: center;
+    align-content: center;
+    text-align: center;
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+}
+
+.Whitebox {
+    color: black;
+    display: flex;
+    flex-direction: column  ;
+    background-color: white;
+    min-height: 150px;
+    max-height: 1000px;
+    flex: 1;
+    flex-grow: 1;
+    text-align: left;
+}
+
+.WhiteboxWithItems{
+    color: black;
+    display: flex;
+    background-color: white;
+    min-height: 150px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
