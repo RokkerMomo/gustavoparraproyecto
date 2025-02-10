@@ -52,6 +52,10 @@ function Home(props) {
          
       
         </div>
+        <div style={{display:"flex",justifyContent:"center",padding:"2rem"}}>
+        <iframe title="vimeo-player" src="https://player.vimeo.com/video/1054839934?h=4b7a607438" width="800" height="600" frameBorder="0"    allowFullScreen></iframe>
+
+        </div>
         
         </>
 
