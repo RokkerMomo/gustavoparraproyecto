@@ -3,11 +3,15 @@ import Slider from "react-slick";
 import sample6 from "../assets/sample6.webp";
 import sample7 from "../assets/sample7.jpg";
 import sample8 from "../assets/sample8.webp";
+import sample9 from "../assets/sample9.jpg";
 import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";  
+import "slick-carousel/slick/slick-theme.css";
 import { Button } from "@mui/material";
 import Image from 'next/image'
 import "./Autoplay.css";
+import Link from 'next/link'
+
+
 function AutoPlay() {
   const settings = {
     dots: true,
@@ -18,41 +22,64 @@ function AutoPlay() {
     speed: 500,
     autoplaySpeed: 2000,
     cssEase: "linear",
-    arrows:true
+    arrows: true
   };
 
-  const numbers= [
-    {img:sample6},{img:sample7},{img:sample8},{img:sample6},{img:sample7},{img:sample8}
+  const numbers = [
+    { img: sample6 }, { img: sample7 }, { img: sample8 }, { img: sample6 }, { img: sample7 }, { img: sample8 }
   ]
 
   return (
     <div>
       <Slider {...settings}>
 
-      {numbers.map((number, i) =>
-        <div key={i}>
+        <div>
 
-        <div className="Container">
+          <div className="Container">
 
-         <div className="Img-Container">
-          <Image className="Img" alt="placeholder" src={number.img} />
-         </div>
+            <div className="Img-Container">
+              <Image className="Img" alt="placeholder" src={sample9} />
+            </div>
 
-         <div className="Footer">
+            <div className="Footer">
+            <Link href="/grade" style={{ fontWeight: "bold", color: "white" }}>
+              <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+              <p style={{ fontWeight: "bold", color: "white" }}>Informacion</p>
+              </Button>
+              </Link>
+              <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+                <p style={{ fontWeight: "bold", color: "white" }}>Compra Ya</p>
+              </Button>
 
-           <Button variant="h6" component="div" sx={{width:125, height:40}} >
-                       <p style={{fontWeight:"bold",color:"white"}}>Informacion</p>
-                     </Button>
+            </div>
 
-                     <Button variant="h6" component="div" sx={{width:125, height:40}} >
-                       <p style={{fontWeight:"bold",color:"white"}}>Compra Ya</p>
-                     </Button>
-
-         </div>
-         
+          </div>
         </div>
-       </div>
-      )}
+
+        {numbers.map((number, i) =>
+          <div key={i}>
+
+            <div className="Container">
+
+              <div className="Img-Container">
+                <Image className="Img" alt="placeholder" src={number.img} />
+              </div>
+
+              <div className="Footer">
+
+                <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+                  <p style={{ fontWeight: "bold", color: "white" }}>Informacion</p>
+                </Button>
+
+                <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+                  <p style={{ fontWeight: "bold", color: "white" }}>Compra Ya</p>
+                </Button>
+
+              </div>
+
+            </div>
+          </div>
+        )}
 
 
       </Slider>

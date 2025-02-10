@@ -3,7 +3,7 @@ import React from 'react';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import YouTubeIcon from '@mui/icons-material/YouTube';
-import BasicAppBar from "../../componentes/appbar.jsx";    
+import BasicAppBar from "../../componentes/appbar.jsx";
 import sample2 from "../../assets/sample2.jpg";
 import SimpleColapse from "../../componentes/SimpleColapse.jsx";
 import AutoPlay from "../../componentes/Autoplay.jsx";
@@ -14,49 +14,47 @@ import Image from 'next/image'
 
 
 function Home(props) {
-    
+
 
 
     return (
         <>
-        {/* <meta name="viewport" content={width} /> */}
-        {/* NAVBAR */}
-        <BasicAppBar></BasicAppBar>
+            {/* <meta name="viewport" content={width} /> */}
+            {/* NAVBAR */}
+            <BasicAppBar></BasicAppBar>
 
-        {/* IMAGEN */}
-        <Image className='Img' alt='HomeImg' style={{height:500}} src={sample2}/>
-     
-        
-        {/* Carrousel */}
-        <div className='Carrousel'>
-        <h2 style={{fontWeight:"bold",color:"white"}}>Nuestros Cursos</h2>
-            <AutoPlay></AutoPlay>
-        </div>
-
-        {/* About us */}
-        <SimpleColapse></SimpleColapse>
+            {/* IMAGEN */}
+            <Image className='Img' alt='HomeImg' style={{ height: 500 }} src={sample2} />
 
 
-        {/* Whitebox */}
-        <div className="WhiteboxWithItems" >
+            {/* Carrousel */}
+            <div className='Carrousel'>
+                <h2 style={{ fontWeight: "bold", color: "white" }}>Nuestros Cursos</h2>
+                <AutoPlay></AutoPlay>
+            </div>
 
-        {/* Conect with us */}
-        <h2>Conecta con nosotros</h2>
-        <div>
-             <FacebookIcon fontSize='large'style={{padding:"0.5rem"}}></FacebookIcon>
-             <InstagramIcon fontSize='large' style={{padding:"0.5rem"}}></InstagramIcon>
-             <YouTubeIcon fontSize='large'style={{padding:"0.5rem"}}></YouTubeIcon>
+            {/* About us */}
+            <SimpleColapse></SimpleColapse>
 
-         </div>
 
-         
-      
-        </div>
-        <div style={{display:"flex",justifyContent:"center",padding:"2rem"}}>
-        <iframe title="vimeo-player" src="https://player.vimeo.com/video/1054839934?h=4b7a607438" width="800" height="600" frameBorder="0"    allowFullScreen></iframe>
+            {/* Whitebox */}
+            <div className="WhiteboxWithItems" >
 
-        </div>
-        
+                {/* Conect with us */}
+                <h2>Conecta con nosotros</h2>
+                <div>
+                    <FacebookIcon fontSize='large' style={{ padding: "0.5rem" }}></FacebookIcon>
+                    <InstagramIcon fontSize='large' style={{ padding: "0.5rem" }}></InstagramIcon>
+                    <YouTubeIcon fontSize='large' style={{ padding: "0.5rem" }}></YouTubeIcon>
+
+                </div>
+
+
+
+            </div>
+            <div style={{ display: "flex", justifyContent: "center", padding: "2rem" }}>
+            </div>
+
         </>
 
     );

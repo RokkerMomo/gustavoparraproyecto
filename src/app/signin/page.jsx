@@ -6,10 +6,14 @@ import AppTheme from './shared-theme/AppTheme';
 import ColorModeSelect from './shared-theme/ColorModeSelect';
 import SignInCard from './components/SignInCard';
 import Content from './components/Content';
+import ButtonAppBar from '../../componentes/appbar.jsx';
+
 
 export default function SignInSide(props) {
   return (
+    <><ButtonAppBar></ButtonAppBar>
     <AppTheme {...props}>
+      
       <CssBaseline enableColorScheme />
       {/* <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} /> */}
       <Stack
@@ -64,5 +68,6 @@ export default function SignInSide(props) {
         </Stack>
       </Stack>
     </AppTheme>
+    </>
   );
 }
