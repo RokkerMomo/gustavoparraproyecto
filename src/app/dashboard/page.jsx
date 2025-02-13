@@ -20,7 +20,9 @@ function ProfilePage() {
           2
         )}
       </pre>
-
+      <button onClick={() => {console.log(session.user.role)}} className="bg-zinc-800 px-4 py-2 block mb-2">
+        aaa
+      </button>
       <button
         className="bg-zinc-800 px-4 py-2 block mb-2"
         onClick={() => {

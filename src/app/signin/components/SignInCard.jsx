@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -38,25 +40,28 @@ export default function SignInCard() {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
-
+  const [error, setError] = React.useState("");
+  const router = useRouter(); // Initialize useRouter
   const handleClickOpen = () => {
-    setOpen(true);
+
   };
 
   const handleClose = () => {
-    setOpen(false);
+
   };
 
-  const handleSubmit = (event) => {
-    if (emailError || passwordError) {
-      event.preventDefault();
-      return;
-    }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const res = await signIn("credentials", {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      redirect: false,
     });
+    console.log(res);
+    if (res?.error) setError(res.error);
+
+    if (res?.ok) return router.push("/home");
   };
 
   const validateInputs = () => {
@@ -67,7 +72,7 @@ export default function SignInCard() {
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage('introduzca una una direccion de correo valida.');
       isValid = false;
     } else {
       setEmailError(false);
@@ -101,49 +106,28 @@ export default function SignInCard() {
       <Box
         component="form"
         onSubmit={handleSubmit}
-        noValidate
         sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
       >
-        <FormControl>
-          <FormLabel htmlFor="email">Email</FormLabel>
+        <FormControl >
+          <FormLabel>Email</FormLabel>
           <TextField
-            error={emailError}
-            helperText={emailErrorMessage}
-            id="email"
-            type="email"
-            name="email"
-            placeholder="your@email.com"
-            autoComplete="email"
-            autoFocus
-            required
+            id='email'
+            type='email'
+            name='email'
             fullWidth
             variant="outlined"
             color={emailError ? 'error' : 'primary'}
           />
         </FormControl>
         <FormControl>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <FormLabel htmlFor="password">Password</FormLabel>
-            <Link
-              component="button"
-              type="button"
-              onClick={handleClickOpen}
-              variant="body2"
-              sx={{ alignSelf: 'baseline' }}
-            >
-              Forgot your password?
-            </Link>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between',textAlign:'center' }}>
+            <FormLabel >Password</FormLabel>
           </Box>
           <TextField
-            error={passwordError}
-            helperText={passwordErrorMessage}
-            name="password"
-            placeholder="••••••"
-            type="password"
-            id="password"
-            autoComplete="current-password"
+            id='password'
+            name='password'
+            type='password'
             autoFocus
-            required
             fullWidth
             variant="outlined"
             color={passwordError ? 'error' : 'primary'}
@@ -153,13 +137,14 @@ export default function SignInCard() {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         />
-        <ForgotPassword open={open} handleClose={handleClose} />
-        <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+        <ForgotPassword />
+        <Button type='submit' fullWidth variant="contained" onClick={validateInputs} >
           Sign in
         </Button>
+        {error && <div className="bg-red-500 text-white p-2 mb-2" style={{textAlign:"center"}}>{"Credenciales Equivocadas !"}</div>}
       </Box>
-    
-     
+
+
     </Card>
   );
 }

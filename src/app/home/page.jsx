@@ -8,12 +8,15 @@ import sample2 from "../../assets/sample2.jpg";
 import SimpleColapse from "../../componentes/SimpleColapse.jsx";
 import AutoPlay from "../../componentes/Autoplay.jsx";
 import "./Home.css";
+
+import { useEffect, useState } from 'react';
 import Image from 'next/image'
 
 
 
 
 function Home(props) {
+
 
 
 

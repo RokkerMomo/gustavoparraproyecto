@@ -1,5 +1,30 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname:"ik.imagekit.io"
+      }
+    ]
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname:"media.istockphoto.com"
+      }
+    ]
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname:"i.ytimg.com"
+      }
+    ]
+  },
+  
     async redirects() {
         return [
           {

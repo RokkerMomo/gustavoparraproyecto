@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import Image from 'next/image'
 import BasicAppBar from "../../componentes/appbar.jsx";
@@ -8,7 +9,36 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import sample9 from "../../assets/sample9.jpg";
 import "./grade.css";
 import { Button, Typography } from '@mui/material';
+import { useSearchParams } from 'next/navigation'
+import axios from 'axios';
+
+
 function page(props) {
+
+
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
+    // Function to run when the page starts
+  const initializePage = () => {
+    axios.get(`http://localhost:5173/grades/${id}`)
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+  };
+
+  React.useEffect(() => {
+    initializePage();
+  }, []);
+
+
     return (
         <>
             {/* NAVBAR */}
