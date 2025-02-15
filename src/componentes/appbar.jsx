@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from 'next/link'
-import { Menu, MenuItem } from '@mui/material';
+import { Avatar, Menu, MenuItem } from '@mui/material';
 import { useSession, signOut } from "next-auth/react";
 import AdbIcon from '@mui/icons-material/Adb';
 import { useParams } from 'next/navigation'
@@ -71,20 +71,13 @@ export default function ButtonAppBar() {
 
           {
             session?.user.role == "admin" && <>
-              <Button variant="h6" component="div" sx={{ width: 125, height: 40 }}
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-              >
-                <p style={{ fontWeight: "bold", color: "white" }}>Admin</p>
-              </Button>
+                <Avatar style={{marginLeft:"auto"}} onClick={handleClick} >{Array.from(session?.user.name)[0]}</Avatar>
               <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
+                disableScrollLock={true}
                 MenuListProps={{
                   'aria-labelledby': 'basic-button',
                 }}

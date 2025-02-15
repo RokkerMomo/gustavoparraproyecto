@@ -1,30 +1,23 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
+  images:  {
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname:"ik.imagekit.io"
-      }
-    ]
-  },
-  images: {
-    remotePatterns: [
+        protocol: "https",
+        hostname: "",
+        port: "",
+        pathname: "",
+      },
       {
-        protocol: 'https',
-        hostname:"media.istockphoto.com"
-      }
-    ]
+        protocol: "http",
+        hostname: "localhost",
+        port: "",
+        pathname: "**",
+      },
+    ],
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname:"i.ytimg.com"
-      }
-    ]
-  },
-  
     async redirects() {
         return [
           {

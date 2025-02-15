@@ -19,7 +19,7 @@ function AutoPlay() {
 
    // Function to run when the page starts
    const initializePage = () => {
-    axios.get('http://localhost:5173/grades')
+    axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/grades`)
         .then(function (response) {
             // handle success
             console.log(response.data);
@@ -59,36 +59,13 @@ useEffect(() => {
     <div>
       <Slider {...settings}>
 
-        <div>
-
-          <div className="Container">
-
-            <div className="Img-Container">
-              <Image className="Img" alt="placeholder" src={sample9} />
-            </div>
-
-            <div className="Footer">
-            <Link href="/grade" style={{ fontWeight: "bold", color: "white" }}>
-              <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
-              <p style={{ fontWeight: "bold", color: "white" }}>Informacion</p>
-              </Button>
-              </Link>
-              <Button onClick={()=>{console.log(numbers[1])}} variant="h6" component="div" sx={{ width: 125, height: 40 }} >
-                <p style={{ fontWeight: "bold", color: "white" }}>Compra Ya</p>
-              </Button>
-
-            </div>
-
-          </div>
-        </div>
-
         {numbers&&numbers.map((number, i) =>
           <div key={i}>
 
             <div className="Container">
 
               <div className="Img-Container">
-                <Image className="Img" alt="placeholder" fill={true} src={number.url_pic} />
+                <img className="Img" alt="placeholder" src={number.url_pic} />
               </div>
 
               <div className="Footer">

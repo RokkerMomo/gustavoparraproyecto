@@ -12,7 +12,7 @@ const handler = NextAuth({
           },
           async authorize(credentials, req) {
             console.log(credentials)
-            const res = await axios.post('http://localhost:5173/signin', {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signin`, {
               email: credentials.email,
               password: credentials.password
             });
