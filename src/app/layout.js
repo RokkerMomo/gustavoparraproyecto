@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { EdgeStoreProvider } from './libs/edgestore';
 import Providers from "./providers";
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
       >
         <Providers>
           <EdgeStoreProvider>
+            <AppRouterCacheProvider>
         {children}
+        </AppRouterCacheProvider>
         </EdgeStoreProvider>
         </Providers>
       </body>
