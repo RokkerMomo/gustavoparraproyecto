@@ -1,0 +1,19 @@
+.background{
+    display: flex;
+    flex-direction: column;
+}
+
+.table-container{
+    display: flex;
+    background-color: white;
+    flex-direction: column;
+    margin: 5rem;
+    padding: 1rem;
+    border-radius: 10px;
+    gap: 1rem;
+}
+
+.Botones{
+    display: flex;
+    justify-items: center;
+}

@@ -7,13 +7,13 @@ import { styled } from '@mui/material/styles';
 import React, { useState } from 'react'
 import Chip from '@mui/material/Chip';
 import CheckIcon from '@mui/icons-material/Check';
-import './NewStudent.css'
+import './EditStudent.css'
 import { useTheme } from '@mui/material/styles';
 import Select from '@mui/material/Select';
 import axios from 'axios';
 import MenuItem from '@mui/material/MenuItem';
 import { useSession, signOut } from "next-auth/react";
-
+import { useSearchParams } from 'next/navigation'
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -41,6 +41,10 @@ function page(props) {
   const [error, setError] = useState(null);
   const [showerror, setshowerror] = useState(false)
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+
+
 
   async function handleCreate() {
     const config = {
@@ -65,7 +69,7 @@ function page(props) {
       setError(response.data.msg);
       setTimeout(
         () => {
-            setshowalert(false);
+          setshowalert(false);
         }
         , 2000)
     } catch (error) {
@@ -74,7 +78,7 @@ function page(props) {
       setshowerror(true);
       setTimeout(
         () => {
-            setshowerror(false);
+          setshowerror(false);
         }
         , 2000)
     }
@@ -103,6 +107,30 @@ function page(props) {
       .finally(function () {
         // always executed
       });
+
+
+    const config = {
+      headers: { Authorization: `Bearer ${session?.user?.token}` }
+    };
+
+    axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/getUserById/${id}`, config)
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        setname(response.data.user.name)
+        setdocument(response.data.user.document)
+        const gradeIds = response.data.grades.map(grade => grade._id);
+        setPersonName(gradeIds);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .finally(function () {
+        // always executed
+      });
+
+
   };
 
   React.useEffect(() => {
@@ -177,14 +205,14 @@ function page(props) {
       }}>
         <div className='form' >
 
-          <h2 style={{ color: "#7c3030", }}>Crear Usuario</h2>
+          <h2 style={{ color: "#7c3030", }}>Editar usuario</h2>
 
           <div className='Data'>
 
             <div className='smalldata'>
 
-              <TextField value={email} onChange={(e) => { setemail(e.target.value) }} color='#7c3030' id="outlined-basic" label="Correo" variant="outlined" />
-              <TextField value={password} onChange={(e) => { setpassword(e.target.value) }} color='#7c3030' id="outlined-basic" label="Contraseña" variant="outlined" />
+              {/* <TextField value={email} onChange={(e) => { setemail(e.target.value) }} color='#7c3030' id="outlined-basic" label="Correo" variant="outlined" /> */}
+              {/* <TextField value={password} onChange={(e) => { setpassword(e.target.value) }} color='#7c3030' id="outlined-basic" label="Contraseña" variant="outlined" /> */}
               <TextField value={name} onChange={(e) => { setname(e.target.value) }} color='#7c3030' id="outlined-basic" label="Nombre" variant="outlined" />
               <TextField value={document} onChange={(e) => { setdocument(e.target.value) }} color='#7c3030' id="outlined-basic" label="Cedula" variant="outlined" />
               <div>

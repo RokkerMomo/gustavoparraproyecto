@@ -53,7 +53,7 @@ export default function ButtonAppBar() {
               LOGO
             </Typography>
           </Link>
-          <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+          {/* <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
             <p style={{ fontWeight: "bold", color: "white" }}>Cursos</p>
           </Button>
           <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
@@ -61,7 +61,7 @@ export default function ButtonAppBar() {
           </Button>
           <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
             <p style={{ fontWeight: "bold", color: "white" }}>Clases</p>
-          </Button>
+          </Button> */}
           {
             !session && <Link href="/signin"><Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
               <p style={{ fontWeight: "bold", color: "white" }}>Acceder</p >
@@ -82,8 +82,30 @@ export default function ButtonAppBar() {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={handleClose}>Manejar Cursos y Usuarios</MenuItem>
-                <MenuItem onClick={handleClose}>Administrar clases</MenuItem>
+                
+                <Link href="/ManageGrades"><MenuItem onClick={handleClose}>Administrar Cursos</MenuItem></Link>
+                <Link href="/ManageStudents"><MenuItem onClick={handleClose}>Administrar Usuarios</MenuItem></Link>
+                <MenuItem onClick={() => { signOut(); }}>Cerrar Sesion</MenuItem>
+              </Menu>
+            </>
+          }
+
+{
+            session?.user.role == "user" && <>
+                <Avatar style={{marginLeft:"auto"}} onClick={handleClick} >{Array.from(session?.user.name)[0]}</Avatar>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                disableScrollLock={true}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem onClick={handleClose}>Clases</MenuItem>
+                <MenuItem onClick={handleClose}>Cursos</MenuItem>
+                <MenuItem onClick={handleClose}>Blog</MenuItem>
                 <MenuItem onClick={() => { signOut(); }}>Cerrar Sesion</MenuItem>
               </Menu>
             </>

@@ -5,13 +5,15 @@ import sample1 from "../../assets/Sample1.webp";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Image from 'next/image'
 import React, { useState } from 'react'
-import './NewGrade.css'
+import './EditGrade.css'
 import { upload } from "../../actions/vimeosdk";
 import UploadFile from "../../componentes/UploadFile.jsx";
 import UploadImgs from '../../componentes/UploadImgs.jsx';
 import CheckIcon from '@mui/icons-material/Check';
 import { useEdgeStore } from '../libs/edgestore.ts';
 import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation'
+import axios from 'axios';
 
 export default function Page() {
 
@@ -23,11 +25,14 @@ export default function Page() {
     const [price, setprice] = useState('')
     const [slogan, setslogan] = useState('')
     const [urlpic, seturlpic] = useState('')
+    const [vidid, setvidid] = useState("")
     const [videofile, setvideoFile] = useState()
     const [loading, setloading] = useState(false)
     const [showalert, setshowalert] = useState(false)
     const { data: session, status } = useSession();
-
+    const [data, setData] = React.useState([])
+    const searchParams = useSearchParams()
+    const id = searchParams.get('id')
 
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -37,44 +42,175 @@ export default function Page() {
 
     const handleCreate = async () => {
         setloading(true)
-        if (!file || !videofile) return;
+        if (!file && !videofile) {
 
-        try {
-            // Upload image
-            const imageRes = await edgestore.publicFiles.upload({ file });
-            console.log(imageRes);
-            seturlpic(imageRes.url);
+            const config = {
+                headers: { Authorization: `Bearer ${session.user.token}` }
+            };
 
-            // Upload video
-            const data = new FormData();
-            data.append('file', videofile);
-            data.append('name', name);
-            data.append('desc', desc);
-            data.append('price', price);
-            data.append('slogan', slogan);
-            data.append('urlpic', imageRes.url);
-            data.append('token', session.user.token);
+            const requestData = {
+                name: name,
+                desc: desc,
+                slogan: slogan,
+                price: Number(price),
+            };
 
-            const videoRes = await fetch('/api/upload', {
-                method: 'POST',
-                body: data
-            });
-
-            if (!videoRes.ok) throw new Error(await videoRes.text());
-
-            console.log('Video uploaded successfully');
+            const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
             setloading(false)
-            setshowalert(true)
-            setTimeout(
-                () => {
-                    setshowalert(false);
+
+        } else {
+            if (file && !videofile) {
+                const imageRes = await edgestore.publicFiles.upload({ file });
+                console.log(imageRes);
+
+                const config = {
+                    headers: { Authorization: `Bearer ${session.user.token}` }
+                };
+
+                const requestData = {
+                    name: name,
+                    desc: desc,
+                    slogan: slogan,
+                    price: Number(price),
+                    url_pic: imageRes.url
+                };
+
+                const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
+                setloading(false)
+
+            } else {
+                if (!file && videofile) {
+
+                    try {
+
+                        // Upload video
+                        const data = new FormData();
+                        data.append('id', vidid);
+                        data.append('file', videofile);
+                        data.append('name', name);
+                        data.append('desc', desc);
+                        data.append('price', price);
+                        data.append('slogan', slogan);
+                        data.append('token', session.user.token);
+
+                        const videoRes = await fetch('/api/upload-edit', {
+                            method: 'POST',
+                            body: data
+                        });
+
+                        if (!videoRes.ok) throw new Error(await videoRes.text());
+
+                        console.log('Video uploaded successfully');
+                        const config = {
+                            headers: { Authorization: `Bearer ${session.user.token}` }
+                        };
+            
+                        const requestData = {
+                            name: name,
+                            desc: desc,
+                            slogan: slogan,
+                            price: Number(price),
+                        };
+            
+                        const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
+                        setloading(false)
+                        setshowalert(true)
+                        setTimeout(
+                            () => {
+                                setshowalert(false);
+                            }
+                            , 5000)
+                    } catch (e) {
+                        console.error(e);
+                        setloading(false)
+                    }
+
+                } else {
+
+                    if (file && videofile) {
+                        try {
+                            // Upload image
+                            const imageRes = await edgestore.publicFiles.upload({ file });
+                            console.log(imageRes);
+                            seturlpic(imageRes.url);
+
+                            // Upload video
+                            const data = new FormData();
+                            data.append('id', vidid);
+                            data.append('file', videofile);
+                            data.append('name', name);
+                            data.append('desc', desc);
+                            data.append('price', price);
+                            data.append('slogan', slogan);
+                            data.append('urlpic', imageRes.url);
+                            data.append('token', session.user.token);
+
+                            const videoRes = await fetch('/api/upload-edit', {
+                                method: 'POST',
+                                body: data
+                            });
+
+                            if (!videoRes.ok) throw new Error(await videoRes.text());
+
+                            console.log('Video uploaded successfully');
+
+                            const config = {
+                                headers: { Authorization: `Bearer ${session.user.token}` }
+                            };
+
+                            const requestData = {
+                                name: name,
+                                desc: desc,
+                                slogan: slogan,
+                                price: Number(price),
+                                url_pic: imageRes.url
+                            };
+
+                            const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
+                            setloading(false)
+                            setshowalert(true)
+                            setTimeout(
+                                () => {
+                                    setshowalert(false);
+                                }
+                                , 5000)
+                        } catch (e) {
+                            console.error(e);
+                            setloading(false)
+                        }
+                    }
                 }
-                , 5000)
-        } catch (e) {
-            console.error(e);
-            setloading(false)
+            }
         }
     };
+
+
+    // Function to run when the page starts
+    const initializePage = () => {
+        axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/grades/${id}`)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                setData(response.data)
+                setname(response.data.name)
+                setprice(response.data.price)
+                setdesc(response.data.desc)
+                setslogan(response.data.slogan)
+                setImage(response.data.url_pic)
+                setvidid(response.data.vidId)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+    };
+
+    React.useEffect(() => {
+        initializePage();
+    }, []);
 
     return (
         <>
@@ -85,7 +221,7 @@ export default function Page() {
             }}>
                 <div className='form' >
 
-                    <h2 style={{ color: "#7c3030", }}>Nuevo Curso</h2>
+                    <h2 style={{ color: "#7c3030", }}>Editar Curso</h2>
 
                     <div className='Data'>
 
@@ -166,12 +302,12 @@ export default function Page() {
 
                     </div>
                     <Button
-                        disabled={!file || !videofile || loading}
+                        disabled={loading}
                         onClick={handleCreate}
                         sx={{ backgroundColor: "#7c3030" }}
                         variant="contained"
                     >
-                        Crear
+                        Editar Informacion
                     </Button>
 
                     {loading && <CircularProgress sx={{ position: "absolute", color: "#7c3030" }} />}
