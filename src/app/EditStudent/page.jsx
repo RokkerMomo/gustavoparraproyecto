@@ -52,18 +52,18 @@ function page(props) {
     };
 
     const requestData = {
-      email: email,
-      password: password,
-      name: name,
-      document: document,
-      role: role,
-      class: personName
+      classIds: personName,
+      updateData:{
+        name:name,
+        document:document,
+        role:role
+      }
     };
 
     console.log(requestData);
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/signup`, requestData, config);
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateUser/${id}`, requestData, config);
       console.log(response);
       setshowalert(true);
       setError(response.data.msg);

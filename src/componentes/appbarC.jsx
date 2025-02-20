@@ -30,9 +30,9 @@ export default function ButtonAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="absolute" style={{ background: "transparent", boxShadow: "none" }}>
+      <AppBar position="relative" style={{ background: "transparent", boxShadow: "none" }}>
         <Toolbar>
-          <Link href="/home" style={{ color: "white" }}>
+          <Link href="/home" style={{ color: "black" }}>
 
 
 
@@ -103,7 +103,9 @@ export default function ButtonAppBar() {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <Link href="/HomeClass"><MenuItem onClick={handleClose}>Clases</MenuItem></Link>
+                <MenuItem onClick={handleClose}>Clases</MenuItem>
+                <MenuItem onClick={handleClose}>Cursos</MenuItem>
+                <MenuItem onClick={handleClose}>Blog</MenuItem>
                 <MenuItem onClick={() => { signOut(); }}>Cerrar Sesion</MenuItem>
               </Menu>
             </>

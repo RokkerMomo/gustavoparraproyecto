@@ -74,7 +74,7 @@ function OptionsMenu({ params }) {
         onClose={handleClose}
       >
         <Link href={{ pathname: "/EditStudent", query: { id: params.row.id } }} style={{ fontWeight: "bold", color: "black" }}><MenuItem onClick={handleEdit}>Editar Informacion</MenuItem></Link>
-        <MenuItem><AlertDialogS vidId={params.row.vidId} id={params.row.id}></AlertDialogS></MenuItem>
+        <MenuItem><AlertDialogS id={params.row.id}></AlertDialogS></MenuItem>
       </Menu>
     </div>
   );

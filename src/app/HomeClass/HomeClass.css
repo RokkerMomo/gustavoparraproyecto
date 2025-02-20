@@ -1,0 +1,68 @@
+.MainCointainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: calc(100vh); /* Set minimum height to 100% of the viewport height minus the AppBar height */
+    overflow: auto;
+    text-align: center; /* Add overflow to handle scrolling if content overflows */
+}
+
+.class-Container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    width: 100%;
+    min-height: calc(100vh - 64px); /* Set minimum height to 100% of the viewport height minus the AppBar height */
+    overflow: auto;/* Set height to 100% to match the height of MainCointainer */
+    gap: 1rem;
+    padding: 1rem;
+    /* border-left: 1px solid rgb(161, 161, 161);
+    border-top: 1px solid rgb(161, 161, 161); */
+}
+
+.class {
+    background-color: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 250px;
+        /* border-style: solid;
+        border-width: 1px;
+        border-color: rgb(161, 161, 161); */
+        border-radius: 5px;
+}
+
+.img-container{
+position: relative;
+display: flex;
+width: 100%;
+height: 65%;
+}
+
+.img{
+position: relative;
+width: 100%;
+height: 100%;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+object-fit: fill;
+}
+
+.class-body{
+    display: flex;
+    height: 10%;
+    flex-direction: column;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgb(161, 161, 161);
+    overflow: hidden; /* Hide overflow */
+    white-space: nowrap; /* Prevent text from wrapping */
+    text-overflow: ellipsis;
+}
+
+.test{
+    height: 64;
+}

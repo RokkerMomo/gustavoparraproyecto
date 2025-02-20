@@ -39,6 +39,7 @@ export default function AlertDialog(vidId) {
         console.log(axiosres.data);
 
         handleClose();
+        window.location.reload();
     } catch (error) {
         console.error('Failed to delete grade:', error);
     }
