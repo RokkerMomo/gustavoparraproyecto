@@ -16,6 +16,14 @@
     z-index: 1; /* Ensure the overlay is above the background image */
 }
 
+.footerP{
+    display: flex;
+    width: 95%;
+    height: 45%;
+    /* background-color: aquamarine; */
+    align-items: end;
+}
+
 .TextoP {
     position: relative;
     z-index: 2; /* Ensure the text is above the overlay */
@@ -42,6 +50,7 @@
 
 .date {
     margin-left: 20px;
+    margin-right: 20px;
     color: #888;
 }
 

@@ -1,6 +1,14 @@
 .background{
+    position: relative;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    min-height: calc(100vh); /* Adjust the height as needed */
+    overflow: auto;
+    text-align: center;
+    background-size: cover; /* Make the background image cover the entire container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-position: center;
 }
 .form{
     display: flex;

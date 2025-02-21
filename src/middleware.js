@@ -8,11 +8,20 @@ export async function middleware(req) {
     return NextResponse.redirect(new URL("/api/auth/signin", req.url));
   }
 
-  if (token.user.role !== "admin") {
+  const adminRoutes = ["/NewStudent", "/NewGrade", "/ManageGrades", "/ManageStudents", "/EditStudent", "/EditGrade"];
+  const userRoutes = ["/HomeClass", "/class", "/UserClasses"]; // Add your user-specific routes here
+
+  const url = req.nextUrl.pathname;
+
+  if (adminRoutes.includes(url) && token.user.role !== "admin") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (userRoutes.includes(url) && token.user.role !== "user" && token.user.role !== "admin") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
   return NextResponse.next();
 }
 
-export const config = { matcher: ["/NewStudent","/NewGrade" ,"/ManageGrades","/ManageStudents","/EditStudent","/EditGrade"] };
+export const config = { matcher: ["/NewStudent", "/NewGrade", "/ManageGrades", "/ManageStudents", "/EditStudent", "/EditGrade", "/HomeClass", "/class", "/UserClasses"] };

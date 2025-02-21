@@ -259,7 +259,7 @@ function page(props) {
             sx={{ backgroundColor: "#7c3030" }}
             variant="contained"
           >
-            Crear
+            Editar
           </Button>
 
           {showalert && <Alert sx={{ position: "absolute" }} icon={<CheckIcon fontSize="inherit" />} severity="success">

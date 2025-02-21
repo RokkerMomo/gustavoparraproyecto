@@ -85,6 +85,7 @@ export default function ButtonAppBar() {
                 
                 <Link href="/ManageGrades"><MenuItem onClick={handleClose}>Administrar Cursos</MenuItem></Link>
                 <Link href="/ManageStudents"><MenuItem onClick={handleClose}>Administrar Usuarios</MenuItem></Link>
+                <Link href="/HomeClass"><MenuItem onClick={handleClose}>Administrar Clases</MenuItem></Link>
                 <MenuItem onClick={() => { signOut(); }}>Cerrar Sesion</MenuItem>
               </Menu>
             </>

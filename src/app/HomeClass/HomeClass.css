@@ -3,9 +3,12 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    min-height: calc(100vh); /* Set minimum height to 100% of the viewport height minus the AppBar height */
+    min-height: calc(100vh - 64px); /* Adjust the height as needed */
     overflow: auto;
-    text-align: center; /* Add overflow to handle scrolling if content overflows */
+    text-align: center;
+    background-size: cover; /* Make the background image cover the entire container */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-position: center; /* Center the background image */
 }
 
 .class-Container {
@@ -54,7 +57,7 @@ object-fit: fill;
 
 .class-body{
     display: flex;
-    height: 10%;
+    height: 15%;
     flex-direction: column;
     padding: 0.5rem;
     border-bottom: 1px solid rgb(161, 161, 161);
