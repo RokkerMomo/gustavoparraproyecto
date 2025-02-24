@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images:  {
+  images: {
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "",
+        hostname: "example.com", // Replace with a valid hostname
         port: "",
-        pathname: "",
+        pathname: "**",
       },
       {
         protocol: "http",
@@ -18,15 +18,15 @@ const nextConfig = {
       },
     ],
   },
-    async redirects() {
-        return [
-          {
-            source: '/',
-            destination: '/home',
-            permanent: true, // Utiliza true para redirección 301, false para redirección 302
-          },
-        ];
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/home',
+        permanent: true, // Use true for 301 redirect, false for 302 redirect
       },
+    ];
+  },
 };
 
 export default nextConfig;
