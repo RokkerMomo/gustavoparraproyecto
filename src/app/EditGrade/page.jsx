@@ -14,6 +14,7 @@ import { useEdgeStore } from '../libs/edgestore.ts';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation'
 import axios from 'axios';
+import { Suspense } from 'react'
 
 export default function Page() {
 
@@ -214,6 +215,7 @@ export default function Page() {
 
     return (
         <>
+        <Suspense>
             {loading && <div style={{ position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.3)", width: "100%", height: "100%" }}></div>}
             <BasicAppBar></BasicAppBar>
             <div className='background' style={{
@@ -316,6 +318,7 @@ export default function Page() {
                     </Alert>}
                 </div>
             </div>
+            </Suspense>
         </>
     )
 }
