@@ -4,7 +4,7 @@ import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './EditGrade.css'
 import { upload } from "../../actions/vimeosdk";
 import UploadFile from "../../componentes/UploadFile.jsx";
@@ -14,10 +14,8 @@ import { useEdgeStore } from '../libs/edgestore.ts';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation'
 import axios from 'axios';
-import { Suspense } from 'react'
 
-export default function Page() {
-
+function EditGradePage() {
     const [image, setImage] = useState(null)
     const [file, setFile] = useState(null)
     const { edgestore } = useEdgeStore();
@@ -32,8 +30,9 @@ export default function Page() {
     const [showalert, setshowalert] = useState(false)
     const { data: session, status } = useSession();
     const [data, setData] = React.useState([])
-    const searchParams = useSearchParams()
-    const id = searchParams.get('id')
+
+    const searchParams = useSearchParams();
+    const id = searchParams.get('id');
 
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -44,7 +43,6 @@ export default function Page() {
     const handleCreate = async () => {
         setloading(true)
         if (!file && !videofile) {
-
             const config = {
                 headers: { Authorization: `Bearer ${session.user.token}` }
             };
@@ -58,7 +56,6 @@ export default function Page() {
 
             const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
             setloading(false)
-
         } else {
             if (file && !videofile) {
                 const imageRes = await edgestore.publicFiles.upload({ file });
@@ -78,12 +75,9 @@ export default function Page() {
 
                 const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
                 setloading(false)
-
             } else {
                 if (!file && videofile) {
-
                     try {
-
                         // Upload video
                         const data = new FormData();
                         data.append('id', vidid);
@@ -105,14 +99,14 @@ export default function Page() {
                         const config = {
                             headers: { Authorization: `Bearer ${session.user.token}` }
                         };
-            
+
                         const requestData = {
                             name: name,
                             desc: desc,
                             slogan: slogan,
                             price: Number(price),
                         };
-            
+
                         const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/updateGrade/${id}`, requestData, config);
                         setloading(false)
                         setshowalert(true)
@@ -125,9 +119,7 @@ export default function Page() {
                         console.error(e);
                         setloading(false)
                     }
-
                 } else {
-
                     if (file && videofile) {
                         try {
                             // Upload image
@@ -185,7 +177,6 @@ export default function Page() {
         }
     };
 
-
     // Function to run when the page starts
     const initializePage = () => {
         axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/grades/${id}`)
@@ -214,22 +205,17 @@ export default function Page() {
     }, []);
 
     return (
-        <>
-        <Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
             {loading && <div style={{ position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.3)", width: "100%", height: "100%" }}></div>}
             <BasicAppBar></BasicAppBar>
             <div className='background' style={{
                 backgroundImage: `url(${sample1.src})`
             }}>
                 <div className='form' >
-
                     <h2 style={{ color: "#7c3030", }}>Editar Curso</h2>
-
                     <div className='Data'>
-
                         <div className='smalldata'>
                             <div className='container'>
-
                                 <div className='img-container' onChange={onImageChange}>
                                     {image && <img alt="preview image" className='img' src={image} />}
                                     <Button
@@ -247,9 +233,7 @@ export default function Page() {
                                         />
                                     </Button>
                                 </div>
-                                {/* <Typography style={{ color: "#7c3030", }}>Foto</Typography> */}
                             </div>
-
                             <TextField value={name} disabled={loading} onChange={(e) => { setname(e.target.value) }} color='#7c3030' id="outlined-basic" label="Nombre del curso" variant="outlined" />
                             <FormControl>
                                 <InputLabel color='#7c3030' htmlFor="outlined-adornment-amount">Precio</InputLabel>
@@ -278,7 +262,6 @@ export default function Page() {
                                 {videofile && <Typography>{videofile.name}</Typography>}
                             </div>
                         </div>
-
                         <div className='smalldata'>
                             <TextField
                                 value={desc} onChange={(e) => { setdesc(e.target.value) }}
@@ -301,7 +284,6 @@ export default function Page() {
                                 maxRows={5}
                             />
                         </div>
-
                     </div>
                     <Button
                         disabled={loading}
@@ -311,14 +293,20 @@ export default function Page() {
                     >
                         Editar Informacion
                     </Button>
-
                     {loading && <CircularProgress sx={{ position: "absolute", color: "#7c3030" }} />}
                     {showalert && <Alert sx={{ position: "absolute" }} icon={<CheckIcon fontSize="inherit" />} severity="success">
                         Curso creado de manera correcta.
                     </Alert>}
                 </div>
             </div>
-            </Suspense>
-        </>
+        </Suspense>
     )
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <EditGradePage />
+        </Suspense>
+    );
 }

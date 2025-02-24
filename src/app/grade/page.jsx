@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image'
 import BasicAppBar from "../../componentes/appbar.jsx";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -12,7 +12,7 @@ import { Button, Typography } from '@mui/material';
 import { useSearchParams } from 'next/navigation'
 import axios from 'axios';
 
-function page(props) {
+function GradePage() {
     const [data, setData] = React.useState([])
     const [url3, setUrl3] = React.useState("")
     const url1 = "https://player.vimeo.com/video/";
@@ -87,4 +87,10 @@ function page(props) {
     );
 }
 
-export default page;
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <GradePage />
+        </Suspense>
+    );
+}

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import './class.css';
 import BasicAppBar from "../../componentes/appbar";
 import sample9 from "../../assets/sample9.jpg";
@@ -12,7 +12,7 @@ import { useSearchParams } from 'next/navigation'
 import { deleteVideo } from "../../actions/vimeosdk";
 import axios from 'axios';
 
-function Page(props) {
+function ClassPage() {
     const { data: session, status } = useSession();
     const searchParams = useSearchParams();
     const id = searchParams.get('id');
@@ -30,7 +30,6 @@ function Page(props) {
         const config = {
             headers: { Authorization: `Bearer ${session.user.token}` }
         };
-
 
         axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/grades/${id}`)
             .then(function (response) {
@@ -73,22 +72,20 @@ function Page(props) {
         return new Date(dateString).toLocaleDateString('en-US', options).replace(/\//g, '-');
     };
 
-
-    const handleDelete = async (vidid,id) => {
+    const handleDelete = async (vidid, id) => {
         try {
-        
             const res = await deleteVideo(vidid);
             console.log(res);
             console.log("video borrado con exito");
-    
+
             const config = {
                 headers: { Authorization: `Bearer ${session.user.token}` }
             };
-            
+
             console.log(session.user.token)
-            const axiosres = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/deleteClass/${id}`,config);
+            const axiosres = await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/deleteClass/${id}`, config);
             console.log(axiosres.data);
-    
+
             window.location.reload();
         } catch (error) {
             console.error('Failed to delete grade:', error);
@@ -127,8 +124,8 @@ function Page(props) {
                             {formatDate(classItem.date)}
                         </div>
                         {
-                            session?.user.role == "admin" && <Button onClick={()=>{
-                                handleDelete(classItem.url_vid,classItem._id)
+                            session?.user.role == "admin" && <Button onClick={() => {
+                                handleDelete(classItem.url_vid, classItem._id)
                             }} sx={{ backgroundColor: "#7c3030" }}>
                                 <DeleteForeverIcon sx={{ color: "white" }}></DeleteForeverIcon>
                             </Button>
@@ -148,4 +145,10 @@ function Page(props) {
     );
 }
 
-export default Page;
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ClassPage />
+        </Suspense>
+    );
+}

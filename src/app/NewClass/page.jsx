@@ -4,7 +4,7 @@ import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './NewClass.css'
 import { upload } from "../../actions/vimeosdk";
 import UploadFile from "../../componentes/UploadFile.jsx";
@@ -13,8 +13,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { useEdgeStore } from '../libs/edgestore.ts';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation'
-export default function Page() {
 
+function NewClassPage() {
     const [image, setImage] = useState(null)
     const [file, setFile] = useState(null)
     const { edgestore } = useEdgeStore();
@@ -52,7 +52,7 @@ export default function Page() {
             // Upload video
             const data = new FormData();
             data.append('file', videofile);
-            data.append('id_grade',id)
+            data.append('id_grade', id)
             data.append('desc', desc);
             data.append('token', session.user.token);
             data.append('date', formattedDate)
@@ -144,4 +144,12 @@ export default function Page() {
             </div>
         </>
     )
+}
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <NewClassPage />
+        </Suspense>
+    );
 }

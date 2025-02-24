@@ -4,7 +4,7 @@ import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import Chip from '@mui/material/Chip';
 import CheckIcon from '@mui/icons-material/Check';
 import './EditStudent.css'
@@ -26,8 +26,7 @@ const MenuProps = {
   },
 };
 
-function page(props) {
-
+function EditStudentPage() {
   const [active, setactive] = useState(false)
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
@@ -43,8 +42,6 @@ function page(props) {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
-
-
 
   async function handleCreate() {
     const config = {
@@ -129,8 +126,6 @@ function page(props) {
       .finally(function () {
         // always executed
       });
-
-
   };
 
   React.useEffect(() => {
@@ -144,7 +139,6 @@ function page(props) {
         : theme.typography.fontWeightRegular,
     };
   }
-
 
   const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 48,
@@ -198,21 +192,15 @@ function page(props) {
   };
 
   return (
-    <>
+    <div>
       <BasicAppBar></BasicAppBar>
       <div className='background' style={{
         backgroundImage: `url(${sample1.src})`
       }}>
         <div className='form' >
-
           <h2 style={{ color: "#7c3030", }}>Editar usuario</h2>
-
           <div className='Data'>
-
             <div className='smalldata'>
-
-              {/* <TextField value={email} onChange={(e) => { setemail(e.target.value) }} color='#7c3030' id="outlined-basic" label="Correo" variant="outlined" /> */}
-              {/* <TextField value={password} onChange={(e) => { setpassword(e.target.value) }} color='#7c3030' id="outlined-basic" label="Contraseña" variant="outlined" /> */}
               <TextField value={name} onChange={(e) => { setname(e.target.value) }} color='#7c3030' id="outlined-basic" label="Nombre" variant="outlined" />
               <TextField value={document} onChange={(e) => { setdocument(e.target.value) }} color='#7c3030' id="outlined-basic" label="Cedula" variant="outlined" />
               <div>
@@ -261,7 +249,6 @@ function page(props) {
           >
             Editar
           </Button>
-
           {showalert && <Alert sx={{ position: "absolute" }} icon={<CheckIcon fontSize="inherit" />} severity="success">
             {error}
           </Alert>}
@@ -270,8 +257,14 @@ function page(props) {
           </Alert>}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-export default page;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditStudentPage />
+    </Suspense>
+  );
+}
