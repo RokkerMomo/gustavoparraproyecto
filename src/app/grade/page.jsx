@@ -6,6 +6,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import PersonIcon from '@mui/icons-material/Person';
 import ComputerIcon from '@mui/icons-material/Computer';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import VideocamIcon from '@mui/icons-material/Videocam';
 import sample9 from "../../assets/sample9.jpg";
 import "./grade.css";
 import { Button, Typography } from '@mui/material';
@@ -62,13 +63,13 @@ function GradePage() {
                     <Button sx={{ backgroundColor: "#EC5800" }} disabled variant="contained" size='large'>Comprar Curso</Button>
                     <div style={{ display: "flex", flexDirection: "column", marginTop: 20, gap: 10 }}>
                         <div style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-                            <PersonIcon fontSize='small'></PersonIcon><Typography style={{ marginLeft: 5 }}>500 alumnos</Typography>
+                            <PersonIcon fontSize='small'></PersonIcon><Typography style={{ marginLeft: 5 }}>{data.students} alumnos</Typography>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
                             <ComputerIcon fontSize='small'></ComputerIcon><Typography style={{ marginLeft: 5 }}>Online y a tu ritmo</Typography>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
-                            <ThumbUpIcon fontSize='small'></ThumbUpIcon><Typography style={{ marginLeft: 5 }}>98.55% Valoraciones positivas (356)</Typography>
+                            <VideocamIcon fontSize='small'></VideocamIcon><Typography style={{ marginLeft: 5 }}>{data.classes} Clases grabadas</Typography>
                         </div>
                         <div style={{ display: "flex", alignItems: "center", flexDirection: "row" }}>
                             <InsertEmoticonIcon fontSize='small'></InsertEmoticonIcon><Typography style={{ marginLeft: 5 }}>100% comprensión garantizada</Typography>
@@ -80,7 +81,7 @@ function GradePage() {
             <div className='Descripcion'>
                 <h2>Descripción del curso</h2>
                 {data.desc && data.desc.split('\n').map((line, index) => (
-                    <Typography key={index}>{line}</Typography>
+                   <Typography key={index} sx={{ textAlign: 'justify' }}>{line}</Typography>
                 ))}
             </div>
         </>

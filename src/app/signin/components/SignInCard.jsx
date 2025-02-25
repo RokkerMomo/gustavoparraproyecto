@@ -15,6 +15,7 @@ import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation'
+import { Alert } from '@mui/material';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -141,7 +142,7 @@ export default function SignInCard() {
         <Button type='submit' fullWidth variant="contained" onClick={validateInputs} >
           Sign in
         </Button>
-        {error && <div className="bg-red-500 text-white p-2 mb-2" style={{textAlign:"center"}}>{"Credenciales Equivocadas !"}</div>}
+        {error &&<Alert sx={{textAlign:"center"}} severity="warning">Credenciales Equivocadas.</Alert>}
       </Box>
 
 

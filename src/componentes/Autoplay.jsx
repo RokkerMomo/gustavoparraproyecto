@@ -6,7 +6,7 @@ import sample8 from "../assets/sample8.webp";
 import sample9 from "../assets/sample9.jpg";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import Image from 'next/image'
 import "./Autoplay.css";
 import Link from 'next/link'
@@ -66,6 +66,9 @@ useEffect(() => {
 
               <div className="Img-Container">
                 <img className="Img" alt="placeholder" src={number.url_pic} />
+                <div className="tira">
+                <Typography sx={{color:"white"}} >{number.name}</Typography>
+                </div>
               </div>
 
               <div className="Footer">
@@ -76,9 +79,9 @@ useEffect(() => {
               </Button>
               </Link>
 
-                <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
+                {/* <Button variant="h6" component="div" sx={{ width: 125, height: 40 }} >
                   <p style={{ fontWeight: "bold", color: "white" }}>Compra Ya</p>
-                </Button>
+                </Button> */}
 
               </div>
 

@@ -12,7 +12,7 @@ import Image from 'next/image'
 export default function Content() {
   return (
     <div style={{width:600,height:628}}>
-      <Image alt='placeholder' style={{objectFit:"cover",width:600,height:628,boxShadow:'5px 5px 5px #ccc'}} src={sample5}/>
+      <Image alt='placeholder' style={{objectFit:"cover",width:600,height:628,boxShadow:'5px 5px 5px #000000'}} src={sample5}/>
     </div>
   );
 }

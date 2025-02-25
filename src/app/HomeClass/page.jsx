@@ -57,8 +57,8 @@ function Page(props) {
                 <div className='class-Container'>
                     {grades.map((grade) => (
                         <div className='class' key={grade._id}>
-                            <div className='img-container'>
-                                <img className='img' src={grade.url_pic} alt="sample" />
+                            <div className='img-containerS'>
+                                <img className='img-class' src={grade.url_pic} alt="sample" />
                             </div>
                             <div className='class-body'>
                                 <Typography>{grade.name}</Typography>
