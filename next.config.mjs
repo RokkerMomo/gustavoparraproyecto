@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
-    serverActionsBodySizeLimit: '500000mb',
+    serverActions:{
+      bodySizeLimit:"500mb"
+    }
   },
   images: {
     minimumCacheTTL: 60,
