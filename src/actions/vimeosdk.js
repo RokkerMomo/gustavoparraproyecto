@@ -1,8 +1,9 @@
 'use server'
 import { Vimeo } from "vimeo";
 import { unlink } from 'fs/promises';
-import fs from 'fs';
+import fs, { writeFile } from 'fs/promises';
 import path from 'path';
+import axios from "axios";
 
 let client = new Vimeo(process.env.NEXT_PUBLIC_VIMEO_CLIENT, process.env.NEXT_PUBLIC_VIMEO_TOKEN, process.env.NEXT_PUBLIC_VIMEO_SECRET);
 
@@ -159,4 +160,65 @@ export async function deleteVideo(videoId) {
             resolve({ msg: 'Video deleted successfully' });
         });
     });
+}
+
+export async function PrepareVideotoUpload(file,id_grade,desc,token,date) {
+
+    const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+    if (!file) {
+        return null
+    }
+
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // Write the file to the filesystem
+    const path = `/tmp/${file.name}`;
+    await writeFile(path, buffer);
+    console.log(`open ${path} to see the uploaded file`);
+
+    try {
+        // Upload the file
+        const { uri, hash } = await upload(path, file.name, 'description');
+        console.log(uri);
+
+        // Extract the video ID from the URI
+        const videoIdMatch = uri.match(/\/videos\/(\d+)/);
+        const videoId = videoIdMatch ? videoIdMatch[1] : null;
+
+        if (!videoId) {
+            throw new Error('Failed to extract video ID from URI');
+        }
+
+        console.log(`Video ID: ${videoId}`);
+        console.log(`Hash: ${hash}`);
+        console.log(`Description: ${desc}`);
+
+        // Log the request data
+        const requestData = {
+            id_grade: id_grade,
+            desc: desc,
+            date: date,
+            url_vid: `${videoId}?h=${hash}`
+        };
+        console.log('Request Data:', requestData);
+
+        // Make the axios request after the upload is complete
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/createClass`, requestData, config);
+
+        console.log('Response:', response);
+
+        // Use the unlink method to delete the file
+        // await unlink(path);
+        // console.log(`${path} has been deleted`);
+
+        return JSON.stringify({ success: true });
+    } catch (error) {
+        console.error('Error:', error.response ? error.response.data : error.message);
+        return JSON.stringify({ success: false, error: error.message });
+    }
+
 }

@@ -6,7 +6,7 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import Image from 'next/image'
 import React, { useState, Suspense } from 'react'
 import './NewClass.css'
-import { upload } from "../../actions/vimeosdk";
+import { PrepareVideotoUpload, upload } from "../../actions/vimeosdk";
 import UploadFile from "../../componentes/UploadFile.jsx";
 import UploadImgs from '../../componentes/UploadImgs.jsx';
 import CheckIcon from '@mui/icons-material/Check';
@@ -57,10 +57,13 @@ function NewClassPage() {
             data.append('token', session.user.token);
             data.append('date', formattedDate)
 
-            const videoRes = await fetch('/api/upload-class', {
-                method: 'POST',
-                body: data
-            });
+            // const videoRes = await fetch('/api/upload-class', {
+            //     method: 'POST',
+            //     body: data
+            // });
+            const videoRes = await PrepareVideotoUpload(
+                videofile,id,desc,session.user.token,formattedDate
+            )
 
             if (!videoRes.ok) throw new Error(await videoRes.text());
 
