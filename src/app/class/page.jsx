@@ -106,7 +106,7 @@ function ClassPage() {
 
                 <div className='footerP'>
                     {
-                        session?.user.role == "admin" && <Link style={{ marginLeft: "auto" }} href={{ pathname: "/test", query: { id: id } }}><Fab sx={{ marginLeft: "auto", backgroundColor: "#7c3030" }} color="primary" aria-label="add">
+                        session?.user.role == "admin" && <Link style={{ marginLeft: "auto" }} href={{ pathname: "/NewClass", query: { id: id } }}><Fab sx={{ marginLeft: "auto", backgroundColor: "#7c3030" }} color="primary" aria-label="add">
                             <AddIcon />
                         </Fab></Link>
                     }
