@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental:{
+    serverActions:{
+      bodySizeLimit:"10000mb"
+    }
+  },
   images: {
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
