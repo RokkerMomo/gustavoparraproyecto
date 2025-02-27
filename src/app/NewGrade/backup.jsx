@@ -1,43 +1,33 @@
-'use client';
+'use client'
 import { Alert, Button, CircularProgress, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
 import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
-import React, { useState, Suspense, useEffect } from 'react'
-import './NewGrade.css'
-import { PrepareVideotoUpload, upload } from "../../actions/vimeosdk";
-import CheckIcon from '@mui/icons-material/Check';
-import { useSession } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation'
-import { useEdgeStore } from '../libs/edgestore.ts';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import Image from 'next/image'
+import React, { useState } from 'react'
+import './NewGrade.css'
+import { upload } from "../../actions/vimeosdk";
+import UploadFile from "../../componentes/UploadFile.jsx";
+import UploadImgs from '../../componentes/UploadImgs.jsx';
+import CheckIcon from '@mui/icons-material/Check';
+import { useEdgeStore } from '../libs/edgestore.ts';
+import { useSession } from 'next-auth/react';
 
-
-
-function NewClassPage() {
+export default function Page() {
 
     const [image, setImage] = useState(null)
     const [ImageFile, setImageFile] = useState(null)
     const { edgestore } = useEdgeStore();
+    const [name, setname] = useState('')
     const [desc, setdesc] = useState('')
+    const [price, setprice] = useState('')
+    const [slogan, setslogan] = useState('')
+    const [urlpic, seturlpic] = useState('')
+    const [videofile, setvideoFile] = useState()
     const [loading, setloading] = useState(false)
     const [showalert, setshowalert] = useState(false)
     const { data: session, status } = useSession();
-    const searchParams = useSearchParams()
-    const id = searchParams.get('id')
-    const [slogan, setslogan] = useState('')
-    const [price, setprice] = useState('')
-    const [nombre, setname] = useState('')
-    const [file, setFile] = useState(null);
-    const [uploadId, setUploadId] = useState('');
-    const [progress, setProgress] = useState(0);
-    const [urlpic, seturlpic] = useState('')
 
-    // Manejo del input tipo "file"
-    function handleFileChange(e) {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        }
-    }
 
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -45,124 +35,34 @@ function NewClassPage() {
         }
     }
 
-
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            if (loading) {
-                event.preventDefault();
-                event.returnValue = '';
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [loading]);
-
-
-
-    // Opcional: pedir un uploadId único al backend (ej. "init")
-    async function handleInit() {
-
+    const handleCreate = async () => {
         setloading(true)
-        if (!file) return;
+        if (!ImageFile || !videofile) return;
 
         try {
-            const res = await fetch('/api/upload-chunk-newGrade?action=init', {
-                method: 'POST',
-            });
-            const data = await res.json();
-            if (data.uploadId) {
-                setUploadId(data.uploadId);
-                await handleUploadChunks(data.uploadId);
-            }
-        } catch (err) {
-            console.error('Error en init:', err);
-        }
-    }
-
-    // Subir en chunks
-    async function handleUploadChunks(id) {
-        if (!file) return;
-        if (!id) {
-            console.error('No tienes uploadId. Llama primero a handleInit().');
-            return;
-        }
-
-        // 2MB por chunk
-        const chunkSize = 2 * 1024 * 1024;
-        const totalChunks = Math.ceil(file.size / chunkSize);
-
-        for (let i = 0; i < totalChunks; i++) {
-            const start = i * chunkSize;
-            const end = Math.min(start + chunkSize, file.size);
-            const chunk = file.slice(start, end);
-
-            const formData = new FormData();
-            formData.append('chunk', chunk);
-            formData.append('chunkIndex', i);
-            formData.append('totalChunks', totalChunks);
-            formData.append('fileName', file.name);
-
-            try {
-                // Subimos cada chunk al endpoint
-                const res = await fetch(`/api/upload-chunk-newGrade?action=upload&uploadId=${id}`, {
-                    method: 'POST',
-                    body: formData,
-                });
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(errorData.error || 'Error al subir chunk');
-                }
-            } catch (err) {
-                console.error('Error subiendo chunk:', i, err);
-                return;
-            }
-
-            // Actualizar progreso
-            const percent = Math.round(((i + 1) / totalChunks) * 100);
-            setProgress(percent);
-        }
-
-        console.log('Todos los chunks subidos');
-        await handleFinish(id);
-    }
-
-    // Llamar a "finish" para recombinar
-    async function handleFinish(idfile) {
-        if (!idfile) return;
-        try {
-
-            const imageRes = await edgestore.publicFiles.upload({ file: ImageFile });
+            // Upload image
+            const imageRes = await edgestore.publicFiles.upload({ ImageFile });
             console.log(imageRes);
-            // seturlpic(imageRes.url);
+            seturlpic(imageRes.url);
 
-            const formData = new FormData();
-            formData.append('fileName', file.name);
-            formData.append('slogan', slogan)
-            formData.append('price', price)
-            formData.append('desc', desc);
-            formData.append('nombre', nombre)
-            formData.append('token', session.user.token);
-            formData.append('urlpic',imageRes.url)
+            // Upload video
+            const data = new FormData();
+            data.append('file', videofile);
+            data.append('name', name);
+            data.append('desc', desc);
+            data.append('price', price);
+            data.append('slogan', slogan);
+            data.append('urlpic', imageRes.url);
+            data.append('token', session.user.token);
 
-
-            const res = await fetch(`/api/upload-chunk-newGrade?action=finish&uploadId=${idfile}`, {
+            const videoRes = await fetch('/api/upload', {
                 method: 'POST',
-                body: formData,
+                body: data
             });
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error || 'Error en finish');
-            }
-            console.log('Archivo recombinado con éxito:', data);
-            alert('Recombinación lista. Archivo final: ' + data.finalFilePath);
-            setProgress(0);
-            setUploadId('');
-            setFile(null);
 
+            if (!videoRes.ok) throw new Error(await videoRes.text());
+
+            console.log('Video uploaded successfully');
             setloading(false)
             setshowalert(true)
             setTimeout(
@@ -170,23 +70,11 @@ function NewClassPage() {
                     setshowalert(false);
                 }
                 , 5000)
-
-        } catch (err) {
-            console.error('Error en finish:', err);
+        } catch (e) {
+            console.error(e);
             setloading(false)
         }
-    }
-
-    // Nueva función para manejar todas las etapas
-    async function handleUploadAll() {
-        try {
-            await handleInit();
-            // await handleUploadChunks();
-            // await handleFinish();
-        } catch (err) {
-            console.error('Error en handleUploadAll:', err);
-        }
-    }
+    };
 
     return (
         <>
@@ -202,7 +90,6 @@ function NewClassPage() {
                     <div className='Data'>
 
                         <div className='smalldata'>
-
                             <div className='container'>
 
                                 <div className='img-container' onChange={onImageChange}>
@@ -225,7 +112,7 @@ function NewClassPage() {
                                 {/* <Typography style={{ color: "#7c3030", }}>Foto</Typography> */}
                             </div>
 
-                            <TextField value={nombre} disabled={loading} onChange={(e) => { setname(e.target.value) }} color='#7c3030' id="outlined-basic" label="Nombre del curso" variant="outlined" />
+                            <TextField value={name} disabled={loading} onChange={(e) => { setname(e.target.value) }} color='#7c3030' id="outlined-basic" label="Nombre del curso" variant="outlined" />
                             <FormControl>
                                 <InputLabel color='#7c3030' htmlFor="outlined-adornment-amount">Precio</InputLabel>
                                 <OutlinedInput disabled={loading} value={price} onChange={(e) => { setprice(e.target.value) }} color='#7c3030' type='number'
@@ -234,7 +121,6 @@ function NewClassPage() {
                                     label="Precio"
                                 />
                             </FormControl>
-
                             <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "5px", minHeight: "75px", maxHeight: "75px", overflow: "hidden", textOverflow: "ellipsis" }}>
                                 <Button
                                     variant="contained"
@@ -248,10 +134,10 @@ function NewClassPage() {
                                         type="file"
                                         name="file"
                                         hidden
-                                        onChange={handleFileChange}
+                                        onChange={(e) => setvideoFile(e.target.files?.[0])}
                                     />
                                 </Button>
-                                {file && <Typography>{file.name}</Typography>}
+                                {videofile && <Typography>{videofile.name}</Typography>}
                             </div>
                         </div>
 
@@ -280,8 +166,8 @@ function NewClassPage() {
 
                     </div>
                     <Button
-                        disabled={!file || loading}
-                        onClick={handleUploadAll}
+                        disabled={!ImageFile || !videofile || loading}
+                        onClick={handleCreate}
                         sx={{ backgroundColor: "#7c3030" }}
                         variant="contained"
                     >
@@ -296,31 +182,4 @@ function NewClassPage() {
             </div>
         </>
     )
-}
-
-
-
-
-
-
-export default function UploadPage() {
-    return (
-
-
-        <Suspense fallback={<div>Loading...</div>}>
-            <NewClassPage />
-        </Suspense>
-
-        // <div style={{ padding: 20 }}>
-        //   <h2>Subir archivo en chunks de 2MB</h2>
-        //   <input type="file" onChange={handleFileChange} />
-        //   <div style={{ margin: '10px 0' }}>
-        //     <Button type="button" onClick={handleUploadAll} disabled={!file}>
-        //       Subir y Recombinación Completa
-        //     </Button>
-        //   </div>
-        //   {progress > 0 && <p>Progreso: {progress}%</p>}
-        //   {uploadId && <p>UploadId: {uploadId}</p>}
-        // </div>
-    );
 }

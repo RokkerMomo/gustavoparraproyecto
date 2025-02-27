@@ -2,7 +2,7 @@
 import { Alert, Button, CircularProgress, TextField, Typography } from '@mui/material'
 import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 import './NewClass.css'
 import { PrepareVideotoUpload, upload } from "../../actions/vimeosdk";
 import CheckIcon from '@mui/icons-material/Check';
@@ -33,6 +33,24 @@ function NewClassPage() {
       setFile(e.target.files[0]);
     }
   }
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (loading) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [loading]);
+
+  
 
   // Opcional: pedir un uploadId único al backend (ej. "init")
   async function handleInit() {
