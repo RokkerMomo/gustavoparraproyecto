@@ -1,28 +1,17 @@
 'use client'
-import { Alert, Button, CircularProgress, FormControl, InputAdornment, InputLabel, OutlinedInput, TextField, Typography } from '@mui/material'
+import { Alert, Button, CircularProgress, TextField, Typography } from '@mui/material'
 import BasicAppBar from "../../componentes/appbar.jsx";
 import sample1 from "../../assets/Sample1.webp";
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import Image from 'next/image'
 import React, { useState, Suspense } from 'react'
 import './NewClass.css'
 import { PrepareVideotoUpload, upload } from "../../actions/vimeosdk";
-import UploadFile from "../../componentes/UploadFile.jsx";
-import UploadImgs from '../../componentes/UploadImgs.jsx';
 import CheckIcon from '@mui/icons-material/Check';
-import { useEdgeStore } from '../libs/edgestore.ts';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation'
 
 function NewClassPage() {
-    const [image, setImage] = useState(null)
-    const [file, setFile] = useState(null)
-    const { edgestore } = useEdgeStore();
-    const [name, setname] = useState('')
+
     const [desc, setdesc] = useState('')
-    const [price, setprice] = useState('')
-    const [slogan, setslogan] = useState('')
-    const [urlpic, seturlpic] = useState('')
     const [videofile, setvideoFile] = useState()
     const [loading, setloading] = useState(false)
     const [showalert, setshowalert] = useState(false)
@@ -30,11 +19,6 @@ function NewClassPage() {
     const searchParams = useSearchParams()
     const id = searchParams.get('id')
 
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setImage(URL.createObjectURL(event.target.files[0]));
-        }
-    }
 
     const handleCreate = async () => {
         const newDate = new Date();

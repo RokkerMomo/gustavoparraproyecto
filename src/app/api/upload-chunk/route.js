@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { upload } from '../../../actions/vimeosdk';
+import axios from 'axios';
 
 export async function POST(request) {
   try {
@@ -49,6 +50,10 @@ export async function POST(request) {
 
       const formData = await request.formData();
       const fileName = formData.get('fileName');
+      const id_grade = formData.get('id_grade');
+      const desc = formData.get('desc');
+      const date = formData.get('date');
+      const token = formData.get('token');
 
       // 1) Buscar los chunks
       const dir = fs.readdirSync('/tmp');
@@ -84,7 +89,39 @@ export async function POST(request) {
       // Aquí podrías subir finalFilePath a tu servidor, S3, Vimeo, etc.
       // Por ahora, solo devolvemos la ruta final de /tmp
 
-      await upload(finalFilePath, fileName, 'Descripción del video');
+      const { uri, hash } = await upload(finalFilePath, fileName, 'description');
+      console.log(uri);
+
+      // Extract the video ID from the URI
+      const videoIdMatch = uri.match(/\/videos\/(\d+)/);
+      const videoId = videoIdMatch ? videoIdMatch[1] : null;
+
+      if (!videoId) {
+        throw new Error('Failed to extract video ID from URI');
+      }
+
+      console.log(`Video ID: ${videoId}`);
+      console.log(`Hash: ${hash}`);
+      console.log(`Description: ${desc}`);
+
+      // Log the request data
+      const requestData = {
+        id_grade: id_grade,
+        desc: desc,
+        date: date,
+        url_vid: `${videoId}?h=${hash}`
+      };
+      console.log('Request Data:', requestData);
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+    };
+
+      // Make the axios request after the upload is complete
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/createClass`, requestData, config);
+
+      console.log('Response:', response);
+      
       return NextResponse.json({
         message: 'Recombinación exitosa',
         finalFilePath,
