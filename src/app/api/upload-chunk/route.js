@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { upload } from '../../../actions/vimeosdk';
 
 export async function POST(request) {
   try {
@@ -82,6 +83,8 @@ export async function POST(request) {
 
       // Aquí podrías subir finalFilePath a tu servidor, S3, Vimeo, etc.
       // Por ahora, solo devolvemos la ruta final de /tmp
+
+      await upload(finalFilePath, fileName, 'Descripción del video');
       return NextResponse.json({
         message: 'Recombinación exitosa',
         finalFilePath,
